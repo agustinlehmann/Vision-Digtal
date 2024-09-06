@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="carrito.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">Carrito de Compras</h1>
+        <div class="row">
+            <div class="col-md-8" id="cart-items">
+            </div>
+            <div class="col-md-4">
+                <div class="bg-light p-3 rounded">
+                    <h4 class="mb-3">Resumen del Pedido</h4>
+                    <div class="cart-total d-flex justify-content-between">
+                        <span>Total</span>
+                        <span id="cart-total">$0.00</span>
+                    </div>
+                    <button id="procederpago" class="btn btn-primary btn-block mt-3" data-toggle="modal" data-target="#paymentModal">Proceder al Pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Confirmación de Pago</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm">
+                        <div class="form-group">
+                            <label for="cardNumber">Número de Tarjeta</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="Ingrese el número de tarjeta">
+                            <div id="cardNumberError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiryDate">Fecha de Expiración</label>
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/AA">
+                            <div id="expiryDateError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="CVV">
+                            <div id="cvvError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="direccion">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" placeholder="Ingrese su dirección">
+                            <div id="direccionError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="codigoPostal">Código Postal</label>
+                            <input type="text" class="form-control" id="codigoPostal" placeholder="Ingrese su código postal">
+                            <div id="codigoPostalError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ciudad">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudad" placeholder="Ingrese su ciudad">
+                            <div id="ciudadError" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="provincia">Provincia</label>
+                            <input type="text" class="form-control" id="provincia" placeholder="Ingrese su provincia">
+                            <div id="provinciaError" class="text-danger"></div>
+                        </div>
+                        <button id="pagar" type="submit" class="btn btn-primary">Pagar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/carrito.js"></script>
+    <script src="scripts/scriptcarrito.js"></script>
+</body>
+</html>

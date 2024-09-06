@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Nav items (copy from your navbar) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <!-- Other nav items here -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pedidos.html">Pedidos</a>
+                    </li>
+                    <!-- Continue with other nav items -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h2 class="mb-4">Listado de Pedidos</h2>
+        <div class="row" id="pedido-list">
+            <!-- Los pedidos se cargarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!-- Script para cargar los pedidos -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/pedidos')
+                .then(response => response.json())
+                .then(data => {
+                    const pedidoList = document.getElementById('pedido-list');
+
+                    data.forEach(pedido => {
+                        const pedidoCard = document.createElement('div');
+                        pedidoCard.className = 'col-md-4';
+
+                        pedidoCard.innerHTML = `
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pedido #${pedido.id_pedido}</h5>
+                                    <p class="card-text"><strong>Cliente ID:</strong> ${pedido.id_usuario}</p>
+                                    <p class="card-text"><strong>Producto ID:</strong> ${pedido.id_producto}</p>
+                                    <p class="card-text"><strong>Cantidad:</strong> ${pedido.cantidad}</p>
+                                    <p class="card-text"><strong>Total:</strong> $${pedido.total}</p>
+                                    <p class="card-text"><strong>Dirección:</strong> ${pedido.direccion}</p>
+                                    <p class="card-text"><strong>Código Postal:</strong> ${pedido.codigo_postal}</p>
+                                    <p class="card-text"><strong>Ciudad:</strong> ${pedido.ciudad}</p>
+                                    <p class="card-text"><strong>Provincia:</strong> ${pedido.provincia}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> Ver</button>
+                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        pedidoList.appendChild(pedidoCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar los pedidos:', error);
+                });
+        });
+    </script>
+</body>
+</html>

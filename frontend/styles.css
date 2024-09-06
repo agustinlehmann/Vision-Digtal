@@ -1,0 +1,130 @@
+nav {
+    background-color: #FFA755 !important;
+}
+
+
+/* Estilo general del body */
+body {
+    background: linear-gradient(#FFA755, 70%, #6495ED);
+
+}
+
+
+
+/* Contenedor de elementos centrados y derechos */
+.navbar-nav {
+    display: flex;
+    width: 100%;
+    justify-content: center; /* Centra los elementos dentro del contenedor */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Alineación de los elementos con ID que empiezan con center */
+.navbar-nav .nav-item[id^="center"] {
+    margin: 0 10px; /* Espaciado opcional entre los elementos */
+}
+
+/* Alineación de los elementos con ID carrito y logeadosino */
+.navbar-nav .nav-item#carrito,
+.navbar-nav .nav-item#logeadosino {
+    margin-left: auto; /* Mueve estos elementos hacia la derecha */
+}
+
+/* Espaciado opcional entre los elementos de la lista */
+.navbar-nav .nav-item {
+    margin: 0 5px; /* Ajusta según tus necesidades */
+}
+
+/* Otras reglas existentes */
+.product-card {
+    max-width: 280px;
+    height: 350px;
+    margin: 0 auto;
+    transition: transform 0.2s;
+}
+
+.product-card img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.carousel-item img {
+    height: 530px;
+    object-fit: cover;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.footer {
+    background-color: #ffa755;
+    color: black;
+    padding: 20px 0;
+    margin-top: 0px;
+}
+
+.carousel-inner .row {
+    justify-content: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #000000;
+}
+/* ------------------------ */
+
+body {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: var(--bg-clr);
+}
+
+.carousel-wrapper {
+    --width: 100px;
+    --gap: 0;
+    --num-items: 10;
+    --ani-offset: calc(var(--width) * var(--num-items) * -1);
+    --ani-speed: 10s;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-wrapper::before,
+.carousel-wrapper::after {
+    content: '';
+    position: absolute;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    animation: slide var(--ani-speed) linear infinite;
+}
+
+.item {
+    flex: 1 0 var(--width);
+    text-align: center;
+    padding: 1rem;
+}
+
+.item>img {
+    width: 150%;
+    height: auto;
+    object-fit: cover;
+}
+
+@keyframes slide {
+    100% {
+        transform: translateX(var(--ani-offset));
+    }
+}

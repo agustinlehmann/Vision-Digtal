@@ -1,0 +1,46 @@
+body {
+    background-color: #f8f9fa;
+}
+.product-card {
+    max-width: 280px; /* Controla el ancho máximo de la tarjeta */
+    height: 350px; /* Controla la altura de la tarjeta */
+    margin: 0 auto; /* Centra las tarjetas dentro de las columnas */
+}
+
+.product-card img {
+    height: 150px; /* Ajusta la altura de la imagen dentro de la tarjeta */
+    object-fit: cover; /* Asegura que la imagen cubra el espacio disponible */
+}
+.carousel-item img {
+    height: 250px; /* Ajusta esta altura según tus necesidades */
+    object-fit: cover; /* Mantén la imagen en su proporción */
+}
+.product-card {
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.carousel-item img {
+    height: 415px;
+    object-fit: cover;
+}
+
+.footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+
+/* Asegúrate de que las columnas en el carrusel estén centradas */
+.carousel-inner .row {
+    justify-content: center;
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #000000; /* Cambia el color de fondo del ícono aquí */
+}
