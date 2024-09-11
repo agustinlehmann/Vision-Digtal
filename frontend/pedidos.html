@@ -54,7 +54,7 @@
     <!-- Script para cargar los pedidos -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            fetch('/api/pedidos')
+            fetch('http://localhost:3000/api/pedidos')
                 .then(response => response.json())
                 .then(data => {
                     const pedidoList = document.getElementById('pedido-list');
