@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
 // Configuración de la base de datos
 const bd = new Sequelize('ecommerce', 'root', '', {
@@ -25,5 +25,5 @@ async function conectarBD() {
     console.error('Unable to connect to the database:', error);
   }
 }
+export { bd, conectarBD };
 
-module.exports = { bd, conectarBD };

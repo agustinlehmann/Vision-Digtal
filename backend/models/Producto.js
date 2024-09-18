@@ -1,6 +1,5 @@
-const { DataTypes } = require('sequelize');
-const { bd } = require('../config/bd');
-
+import { DataTypes } from 'sequelize';
+import { bd } from '../config/bd.js';
 // Definir el modelo de Producto
 const Producto = bd.define('Producto', {
   id_producto: {
@@ -36,4 +35,4 @@ const Producto = bd.define('Producto', {
 // Sincronizar el modelo con la base de datos
 Producto.sync();
 
-module.exports = Producto;
+export default Producto;

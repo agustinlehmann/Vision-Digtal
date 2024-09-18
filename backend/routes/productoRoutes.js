@@ -1,14 +1,16 @@
-const express = require('express');
-const router = express.Router();
-const upload = require('../config/multerConfig'); // Importa la configuración de Multer
-const {
+import express from 'express';
+import upload from '../config/multerConfig.js';
+
+import {
     crearProducto,
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
     eliminarProducto,
     filtrarProductosPorDetalle
-} = require('../controllers/productoController');
+} from '../controllers/productoController.js';
+
+const router = express.Router();
 
 // Carga de archivos para crear un producto
 router.post('/', upload.single('imagen'), crearProducto);
@@ -21,4 +23,4 @@ router.get('/:id', obtenerProductoPorId);
 router.delete('/:id', eliminarProducto);
 router.get('/filtrar', filtrarProductosPorDetalle);
 
-module.exports = router;
+export default router; // Exporta el enrutador con el nombre correcto

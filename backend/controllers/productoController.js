@@ -1,5 +1,5 @@
-const Producto = require('../models/Producto'); // Asegúrate de que la ruta sea correcta
-const { validationResult } = require('express-validator');
+import Producto from '../models/Producto.js';
+import { validationResult } from 'express-validator';
 
 const crearProducto = async (req, res) => {
     const errors = validationResult(req);
@@ -154,12 +154,12 @@ const filtrarProductosPorDetalle = async (req, res) => {
 };
 
 
-module.exports = {
+
+export {
     crearProducto,
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
     eliminarProducto,
     filtrarProductosPorDetalle
-
 };

@@ -1,8 +1,7 @@
-const Usuario = require('../models/Usuario');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
-
+import Usuario from '../models/Usuario.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { validationResult } from 'express-validator';
 const crearUsuario = async (req, res) => {
 
     const errors = validationResult(req);
@@ -175,12 +174,13 @@ const verificarToken = async (req, res) => {
 };
 
 
-module.exports = {
+
+export {
     crearUsuario,
     obtenerUsuarios,
     obtenerUsuarioPorId,
     actualizarUsuario,
     eliminarUsuario,
     iniciarSesion,
-    verificarToken,
+    verificarToken
 };

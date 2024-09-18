@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { bd } = require('../config/bd');
-const Usuario = require('./Usuario'); // Asegúrate de que la ruta sea correcta
-const Producto = require('./Producto'); // Asegúrate de que la ruta sea correcta
+import { DataTypes } from 'sequelize';
+import { bd } from '../config/bd.js';
+import Usuario from './Usuario.js'; // Asegúrate de que la ruta sea correcta
+import Producto from './Producto.js'; // Asegúrate de que la ruta sea correcta
 
 const Pedido = bd.define('Pedido', {
   id_pedido: {
@@ -54,4 +54,5 @@ const Pedido = bd.define('Pedido', {
   timestamps: false // Deshabilitar timestamps si no los necesitas
 });
 Pedido.sync();
-module.exports = Pedido;
+export default Pedido;
+

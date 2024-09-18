@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const { bd } = require('../config/bd');
+import { DataTypes } from 'sequelize';
+import { bd } from '../config/bd.js';
 
 const Usuario = bd.define('Usuario', {
   id_usuario: {
@@ -30,4 +30,4 @@ const Usuario = bd.define('Usuario', {
 });
 
 Usuario.sync();
-module.exports = Usuario;
+export default Usuario;

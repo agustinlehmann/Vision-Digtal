@@ -1,7 +1,7 @@
-const { bd } = require('../config/bd');
-const Pedido = require('../models/Pedido');
-const Producto = require('../models/Producto');
-const { validationResult } = require('express-validator');
+import { bd } from '../config/bd.js';
+import Pedido from '../models/Pedido.js';
+import Producto from '../models/Producto.js';
+import { validationResult } from 'express-validator';
 
 const crearPedido = async (req, res) => {
     const transaction = await bd.transaction();
@@ -151,10 +151,11 @@ const eliminarPedido = async (req, res) => {
     }
 };
 
-module.exports = {
+
+export {
     crearPedido,
     obtenerPedidos,
     obtenerPedidoPorId,
     actualizarPedido,
-    eliminarPedido,
+    eliminarPedido  
 };
