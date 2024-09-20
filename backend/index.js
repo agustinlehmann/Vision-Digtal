@@ -5,10 +5,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // SDK de Mercado Pago
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+import mercadopago from 'mercadopago';
 
-// Agrega credenciales
-const client = new MercadoPagoConfig({ accessToken: 'YOUR_ACCESS_TOKEN' });
+// Agrega credenciales usando el método correcto según la versión
+mercadopago.configurations = {
+    access_token: 'TEST-e6e86703-feb8-4555-a64c-5acf8bb55e21'
+};
 
 // Configura dotenv
 dotenv.config();
@@ -40,26 +42,24 @@ app.get('/', (req, res) => {
 // Ruta para crear una preferencia de Mercado Pago
 app.post('/api/create_preference', async (req, res) => {
     try {
-        const body = {
+        const preference = {
             items: [{
                 title: req.body.title,
                 quantity: Number(req.body.quantity),
                 unit_price: Number(req.body.priceFloat),
-                total_amount: Number(req.body.itemtotal),
-                currency_id: 'ARS'
             }],
             back_urls: {
-                success: 'https://www.youtube.com/',
+                success: 'https://www.youtube.com/',  // Cambia las URLs según tu necesidad
                 failure: 'https://www.youtube.com/',
                 pending: 'https://www.youtube.com/'
             },
-            auto_return: 'approved'
+            auto_return: 'approved',
+            currency_id: 'ARS',
         };
 
-        const preference = new Preference(client);
-        const result = await preference.create({ body });
+        const result = await mercadopago.preferences.create(preference);
         res.json({
-            id: result.id,
+            id: result.body.id,
         });
     } catch (error) {
         console.log(error);

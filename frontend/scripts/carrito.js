@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cart.forEach(item => {
             const { name, price, quantity } = item;
-            const priceFloat = typeof price === 'string' ? parseFloat(price) : price;
+            const priceFloat = parseFloat(price);
             const itemTotal = priceFloat * quantity;
             total += itemTotal;
 
@@ -49,13 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function verificarCarrito() {
-        const carritoJSON = localStorage.getItem('cart');
-        const carrito = JSON.parse(carritoJSON);
-        if (!carrito || carrito.length === 0) {
-            procederpago.style.display = 'none';
-            return false;
-        }
-        return true;
+        const carrito = JSON.parse(localStorage.getItem('cart'));
+        procederpago.style.display = carrito && carrito.length > 0 ? 'block' : 'none';
+        return carrito && carrito.length > 0;
     }
 
     function validarToken(token, datos) {
@@ -66,35 +62,30 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => response.json())
             .then(data => {
-                const carritoJSON = localStorage.getItem('cart');
-                const carrito = JSON.parse(carritoJSON);
-                let total = 0;
+                const carrito = JSON.parse(localStorage.getItem('cart'));
                 const pedidos = carrito.map(item => {
                     const { name, price, quantity, id } = item;
-                    const priceFloat = typeof price === 'string' ? parseFloat(price) : price;
-                    const idFloat = typeof id === 'string' ? parseFloat(id) : id;
-                    const itemTotal = priceFloat * quantity;
-                    total += itemTotal;
+                    const priceFloat = parseFloat(price);
                     return {
                         "id_usuario": data.id_usuario,
-                        "id_producto": idFloat,
+                        "id_producto": id,
                         "cantidad": quantity,
-                        "total": itemTotal,
+                        "total": priceFloat * quantity,
                         "direccion": datos.direccion,
                         "codigo_postal": datos.codigoPostal,
                         "ciudad": datos.ciudad,
                         "provincia": datos.provincia
+                        
                     };
                 });
-
                 crearPedidos(pedidos);
             })
-            .catch(error => reiniciar());
+            .catch(reiniciar);
     }
 
     async function crearPedidos(pedidos) {
         try {
-            let pedidosFallidos = [];
+            const pedidosFallidos = [];
             for (let pedido of pedidos) {
                 const response = await fetch('http://localhost:3000/api/pedidos', {
                     method: 'POST',
@@ -137,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!verificarCarrito()) return;
 
         pagar.addEventListener('click', async function (event) {
+            event.preventDefault();
             const tarjeta = document.getElementById('cardNumber').value.trim();
             const fecha = document.getElementById('expiryDate').value.trim();
             const cvv = document.getElementById('cvv').value.trim();
@@ -144,58 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const codigoPostal = document.getElementById('codigoPostal').value.trim();
             const ciudad = document.getElementById('ciudad').value.trim();
             const provincia = document.getElementById('provincia').value.trim();
-            const { name, price, quantity } = item;
-            const priceFloat = typeof price === 'string' ? parseFloat(price) : price;
-            const itemTotal = priceFloat * quantity;
-            total += itemTotal;
-            try {
-                const orderData = {
-                    title: name,
-                    quantity: quantity,
-                    price: priceFloat,
-                    total: itemTotal
-                };
-                const response = await fetch("htto://localhost:3000/api/create_preference", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer' + token
-                    },
-                    body: JSON.stringify(orderData),
-                })
 
-                const preference = await response.json()
-                createCheckoutButton(preference.id);
-            } catch (error) {
-                alert("error: (")
-            }
-            const createCheckoutButton = (preferenceId) => {
-                const bricksBuilder = mp.bricks();
-
-                const renderComponent = async () => {
-                    if (window.checkoutButton) window.checkoutButton.unmount();
-                    await bricksBuilder.create("wallet", "wallet_container", {
-                        initialization: {
-                            preferenceId: "<PREFERENCE_ID>",
-                        },
-                        customization: {
-                            texts: {
-                                valueProp: 'smart_option',
-                            },
-                        },
-                    });
-
-                }
-                renderComponent()
-            }
-
-
-
+            // Validaciones
             let errorMessage = '';
-
             if (tarjeta.length < 16 || !/^\d+$/.test(tarjeta)) {
                 document.getElementById('cardNumberError').textContent = 'Número de tarjeta inválido.';
-                errorMessage += 'Por favor, ingresa un número de tarjeta válido.\n';
+                errorMessage += 'Número de tarjeta inválido.\n';
             } else {
                 document.getElementById('cardNumberError').textContent = '';
             }
@@ -203,54 +149,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const expiryDatePattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
             if (!expiryDatePattern.test(fecha)) {
                 document.getElementById('expiryDateError').textContent = 'Fecha de expiración inválida (debe ser MM/AA).';
-                errorMessage += 'Por favor, ingresa una fecha de expiración válida.\n';
+                errorMessage += 'Fecha de expiración inválida.\n';
             } else {
                 document.getElementById('expiryDateError').textContent = '';
             }
 
             if (cvv.length !== 3 || isNaN(cvv)) {
                 document.getElementById('cvvError').textContent = 'CVV inválido.';
-                errorMessage += 'Por favor, ingresa un código de seguridad válido.\n';
+                errorMessage += 'CVV inválido.\n';
             } else {
                 document.getElementById('cvvError').textContent = '';
             }
 
             if (!direccion) {
                 document.getElementById('direccionError').textContent = 'La dirección es obligatoria.';
-                errorMessage += 'Por favor, ingresa tu dirección.\n';
+                errorMessage += 'La dirección es obligatoria.\n';
             } else {
                 document.getElementById('direccionError').textContent = '';
             }
 
             if (!codigoPostal) {
                 document.getElementById('codigoPostalError').textContent = 'El código postal es obligatorio.';
-                errorMessage += 'Por favor, ingresa tu código postal.\n';
+                errorMessage += 'El código postal es obligatorio.\n';
             } else {
                 document.getElementById('codigoPostalError').textContent = '';
             }
 
             if (!ciudad) {
                 document.getElementById('ciudadError').textContent = 'La ciudad es obligatoria.';
-                errorMessage += 'Por favor, ingresa tu ciudad.\n';
+                errorMessage += 'La ciudad es obligatoria.\n';
             } else {
                 document.getElementById('ciudadError').textContent = '';
             }
 
             if (!provincia) {
                 document.getElementById('provinciaError').textContent = 'La provincia es obligatoria.';
-                errorMessage += 'Por favor, ingresa tu provincia.\n';
+                errorMessage += 'La provincia es obligatoria.\n';
             } else {
                 document.getElementById('provinciaError').textContent = '';
             }
 
             if (errorMessage) {
                 alert(errorMessage);
-                event.preventDefault();
-            } else {
-                alert("Procesando el pago. Aprete aceptar para confirmar su pago...");
-                event.preventDefault();
-                validarToken(token, { direccion, codigoPostal, ciudad, provincia });
+                return;
             }
+
+            alert("Procesando el pago. Aprete aceptar para confirmar su pago...");
+            validarToken(token, { direccion, codigoPostal, ciudad, provincia });
         });
     });
 });
