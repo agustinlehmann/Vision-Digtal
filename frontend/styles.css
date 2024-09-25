@@ -8,8 +8,15 @@ body {
     background: linear-gradient(#FFA755, 70%, #6495ED);
 
 }
-
-
+h3{
+    color:  rgb(220, 220, 220);;
+    text-align: center;
+}
+hr {
+    border: 2px solid rgb(255, 255, 255); /* Cambia el color y el grosor aquí */
+    width: 50%; /* Ajusta el ancho de la línea */
+    margin: 20px auto; /* Centra la línea y añade margen vertical */
+}
 
 /* Contenedor de elementos centrados y derechos */
 .navbar-nav {

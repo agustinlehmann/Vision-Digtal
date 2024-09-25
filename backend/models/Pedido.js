@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { bd } from '../config/bd.js';
 import Usuario from './Usuario.js'; // Asegúrate de que la ruta sea correcta
-import Producto from './Producto.js'; // Asegúrate de que la ruta sea correcta
 
 const Pedido = bd.define('Pedido', {
   id_pedido: {
@@ -33,26 +32,24 @@ const Pedido = bd.define('Pedido', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  id_producto: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Producto,
-      key: 'id_producto'
-    }
-  },
-  cantidad: {
-    type: DataTypes.INTEGER,
+  productos: {
+    type: DataTypes.JSON, // Almacenar los productos como JSON
     allowNull: false
   },
   total: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false
+  },
+  estado: {
+    type: DataTypes.ENUM, // Usar ENUM para los estados
+    values: ['pendiente', 'en_proceso', 'enviado', 'entregado', 'cancelado'],
+    allowNull: false,
+    defaultValue: 'pendiente' // Valor por defecto
   }
 }, {
-  tableName: 'Pedido', // Nombre de la tabla en la base de datos
-  timestamps: false // Deshabilitar timestamps si no los necesitas
+  tableName: 'Pedido',
+  timestamps: false
 });
+
 Pedido.sync();
 export default Pedido;
-

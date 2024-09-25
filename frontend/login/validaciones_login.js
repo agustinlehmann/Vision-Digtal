@@ -48,6 +48,8 @@ function iniciarSesion(email, password) {
       })
       .then(data => {
           console.log(data);
+
+          localStorage.setItem('userId', data.id_usuario); // Almacena el id_usuario
           localStorage.setItem('authToken', data.token);
           localStorage.setItem('userRole', 'user'); // Usuario normal
           window.location.href = '../index.html';

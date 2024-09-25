@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const adminButton = document.getElementById('adminButton');
   const carritoButton = document.querySelector('.nav-link[href="carrito.html"]');
   const logeado = document.getElementById('logeadosino');
-  
+  const adminPedidosLink = document.getElementById('adminPedidos');
+  const pedidosLink = document.getElementById('pedidos');
+    
   // Crear el botón de cerrar sesión
   const logoutButton = document.createElement('li');
   logoutButton.classList.add('nav-item');
@@ -41,12 +43,17 @@ if (navbarNav) {
         // Ocultar el botón de carrito si existe
         if (carritoButton) carritoButton.style.display = 'none';
         if (logeado) logeado.style.display = 'none';
+        if (adminPedidosLink) adminPedidosLink.style.display = 'block';
+        if (pedidosLink) pedidosLink.style.display = 'none';
+    
         // Mostrar el botón de cerrar sesión y el botón de admin
         if (logoutButton) navbarNav.appendChild(logoutButton);
         if (adminButton) navbarNav.appendChild(adminButton);
     } else if (userRole === 'user') {
         // Ocultar el botón de admin si existe
         if (adminButton) adminButton.style.display = 'none';
+        if (adminPedidosLink) adminPedidosLink.style.display = 'none';
+        if (pedidosLink) pedidosLink.style.display = 'block';
         // Mostrar el botón de cerrar sesión y el botón de carrito
         if (logoutButton) navbarNav.appendChild(logoutButton);
         if (carritoButton) navbarNav.appendChild(carritoButton);
@@ -54,6 +61,8 @@ if (navbarNav) {
         // Si el rol no es admin ni user, ocultar ambos botones
         if (adminButton) adminButton.style.display = 'none';
         if (logoutButton) logoutButton.style.display = 'none';
+        if (adminPedidosLink) adminPedidosLink.style.display = 'none';
+    if (pedidosLink) pedidosLink.style.display = 'none';
     }
 } else {
     console.error('No se encontró .navbar-nav en el DOM');
@@ -64,5 +73,6 @@ if (navbarNav) {
 function cerrarSesion() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('userRole');
+  localStorage.removeItem('userId')   
   window.location.href = 'index.html';
 }

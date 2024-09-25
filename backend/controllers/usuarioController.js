@@ -151,11 +151,13 @@ const iniciarSesion = async (req, res) => {
 
         const token = jwt.sign({ id_usuario: usuario.id_usuario }, 'tu_secreto', { expiresIn: '1h' });
 
-        res.status(200).json({ token });
+        // Incluyendo id_usuario en la respuesta
+        res.status(200).json({ id_usuario: usuario.id_usuario, token });
     } catch (error) {
         res.status(500).json({ error: 'Error al iniciar sesión' });
     }
 };
+
 const verificarToken = async (req, res) => {
     const { token } = req.body;
 

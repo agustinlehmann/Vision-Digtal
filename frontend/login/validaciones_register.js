@@ -46,31 +46,35 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function registrar(name, mail, pass, dir) {
-  const user = {
-      nombre_usuario: name,
-      email: mail,
-      password: pass,
-      direccion: dir
-  };
-
-  fetch('http://localhost:3000/api/usuarios', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-  })
-  .then(data => {
-      console.log('Usuario registrado:', data);
-      window.location.href = '../index.html';
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
-}
+    const user = {
+        nombre_usuario: name,
+        email: mail,
+        password: pass,
+        direccion: dir
+    };
+  
+    fetch('http://localhost:3000/api/usuarios', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Usuario registrado:', data);
+        // Guarda el userId en localStorage
+        localStorage.setItem('userId', data.id);
+        localStorage.setItem('authToken', data.token); // Si es que devuelves un token
+        window.location.href = '../index.html';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+  

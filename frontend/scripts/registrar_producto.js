@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nombre === '') {
       errorMessage += 'El nombre del producto no puede estar vacío.\n';
     } else if (nombre.length < 5) {
-      errorMessage += 'El nombre del producto debe tener al menos 5 caracteres.\n';
+      errorMessage += 'El nombre del producto debe tener al menos 5 caractefres.\n';
     }
 
     // Validación para el campo de precio

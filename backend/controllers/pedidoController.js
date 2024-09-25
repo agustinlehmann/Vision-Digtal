@@ -2,60 +2,73 @@ import { bd } from '../config/bd.js';
 import Pedido from '../models/Pedido.js';
 import Producto from '../models/Producto.js';
 import { validationResult } from 'express-validator';
-
 const crearPedido = async (req, res) => {
     const transaction = await bd.transaction();
 
     try {
-        const { id_usuario, id_producto, cantidad, total, direccion, codigo_postal, ciudad, provincia } = req.body;
+        const { id_usuario, productos, direccion, codigo_postal, ciudad, provincia } = req.body;
 
         // Validación de datos
-        if (!id_usuario || !id_producto || cantidad === undefined || total === undefined || !direccion || !codigo_postal || !ciudad || !provincia) {
+        if (!id_usuario || !productos || !Array.isArray(productos) || productos.length === 0 || !direccion || !codigo_postal || !ciudad || !provincia) {
             await transaction.rollback();
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
-        if (typeof id_usuario !== 'number' || typeof id_producto !== 'number' || typeof cantidad !== 'number' || typeof total !== 'number') {
-            await transaction.rollback();
-            return res.status(400).json({ error: 'Datos inválidos' });
-        }
+        // Validar y procesar cada producto
+        const productoPromises = productos.map(async (item) => {
+            const { id_producto, cantidad } = item;
 
-        // Verificación del producto
-        const producto = await Producto.findByPk(id_producto, { transaction });
-        if (!producto) {
-            await transaction.rollback();
-            return res.status(404).json({ error: 'Producto no encontrado' });
-        }
+            if (!id_producto || cantidad === undefined || typeof cantidad !== 'number') {
+                throw new Error('Datos de productos inválidos');
+            }
 
-        // Verificación de stock
-        if (producto.stock < cantidad) {
-            await transaction.rollback();
-            return res.status(400).json({ error: 'Stock insuficiente' });
-        }
+            // Verificación del producto
+            const producto = await Producto.findByPk(id_producto, { transaction });
+            if (!producto) {
+                throw new Error('Producto no encontrado');
+            }
 
-        // Actualización de stock y creación de pedido
-        producto.stock -= cantidad;
-        await producto.save({ transaction });
+            // Verificación de stock
+            if (producto.stock < cantidad) {
+                throw new Error('Stock insuficiente');
+            }
 
-        const nuevoPedido = await Pedido.create({
+            // Actualización de stock
+            producto.stock -= cantidad;
+            await producto.save({ transaction });
+
+            return { producto, cantidad }; // Devolver producto y cantidad
+        });
+
+        const productosDetails = await Promise.all(productoPromises);
+
+        // Calcular total
+        const total = productosDetails.reduce((acc, item) => {
+            return acc + (item.producto.precio * item.cantidad);
+        }, 0);
+
+        // Crear el objeto del pedido con todos los datos
+        const nuevoPedidoData = {
             id_usuario,
-            id_producto,
-            cantidad,
-            total,
+            productos: JSON.stringify(productos), // Guardamos los productos como un JSON string
             direccion,
             codigo_postal,
             ciudad,
-            provincia
-        }, { transaction });
+            provincia,
+            total
+        };
+
+        const nuevoPedido = await Pedido.create(nuevoPedidoData, { transaction });
 
         await transaction.commit();
         res.status(201).json(nuevoPedido);
     } catch (error) {
         await transaction.rollback();
         console.error('Error al crear el pedido:', error);
-        res.status(500).json({ error: 'Error al crear el pedido' });
+        res.status(500).json({ error: error.message || 'Error al crear el pedido' });
     }
 };
+
 
 const obtenerPedidos = async (req, res) => {
     try {

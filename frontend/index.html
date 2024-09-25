@@ -56,10 +56,13 @@
                             </a>
                         </li>
                      
-                        <li class="nav-item"></li>
-                            <a class="nav-link" id="pedidos" href="pedidos.html"><i
-                                class="bi bi-clipboard-check me-2"></i> Pedidos</a>
+                        <li class="nav-item" id="adminPedidos" style="display: none;">
+                            <a class="nav-link" href="adminPedidos.html"><i class="bi bi-clipboard-check me-2"></i> Admin Pedidos</a>
                         </li>
+                        <li class="nav-item" id="pedidos" style="display: none;">
+                            <a class="nav-link" href="Pedidos.html"><i class="bi bi-clipboard-check me-2"></i> Pedidos</a>
+                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" id="logeadosino" href="login/register.html"><i
                                     class="bi bi-person-circle"></i> Register</a>
@@ -106,9 +109,10 @@
             <span class="visually-hidden">Siguiente</span>
         </button>
     </div>
-
-
+    
     <div class="container mt-5">
+        <h3>Productos Destacados</h3>
+        <hr>
         <div id="productCarousel" class="carousel slide">
             <div class="carousel-inner">
                 <div class="carousel-item active">
