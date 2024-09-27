@@ -1,10 +1,11 @@
 import Producto from '../models/Producto.js';
 import { validationResult } from 'express-validator';
+import { Op } from 'sequelize'; // Asegúrate de importar Op para filtrar
 
 const crearProducto = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('Errores de validación:', errors.array()); // Agrega un log para depurar
+        console.log('Errores de validación:', errors.array());
         return res.status(400).json({ errors: errors.array() });
     }
 
@@ -13,15 +14,15 @@ const crearProducto = async (req, res) => {
         const precio = parseFloat(req.body.precio);
         const stock = parseInt(req.body.stock, 10);
         const detalle = req.body.detalle;
+        const detallar = req.body.detallar; // Obtener el nuevo campo
         const imagen = req.file ? req.file.path : null;
-        console.log(imagen,req.file)
 
-        if (!nombre_producto || isNaN(precio) || isNaN(stock) || !detalle) {
+        if (!nombre_producto || isNaN(precio) || isNaN(stock) || !detalle || !detallar) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
-        if (typeof nombre_producto !== 'string' || typeof detalle !== 'string') {
-            return res.status(400).json({ error: 'Datos inválidos', detalles: { nombre_producto, precio, stock, detalle, imagen } });
+        if (typeof nombre_producto !== 'string' || typeof detalle !== 'string' || typeof detallar !== 'string') {
+            return res.status(400).json({ error: 'Datos inválidos', detalles: { nombre_producto, precio, stock, detalle, detallar, imagen } });
         }
 
         if (precio <= 0 || stock < 0) {
@@ -33,6 +34,7 @@ const crearProducto = async (req, res) => {
             precio,
             stock,
             detalle,
+            detallar, // Incluir el nuevo campo
             imagen
         });
         res.status(201).json(nuevoProducto);
@@ -41,7 +43,6 @@ const crearProducto = async (req, res) => {
         res.status(500).json({ error: 'Error al crear el producto' });
     }
 };
-
 
 // Obtener todos los productos
 const obtenerProductos = async (req, res) => {
@@ -84,7 +85,7 @@ const actualizarProducto = async (req, res) => {
     }
 
     try {
-        const { nombre_producto, precio, stock, detalle } = req.body;
+        const { nombre_producto, precio, stock, detalle, detallar } = req.body;
         const imagen = req.file ? req.file.path : null;
 
         const producto = await Producto.findByPk(id);
@@ -97,6 +98,7 @@ const actualizarProducto = async (req, res) => {
         producto.precio = precio || producto.precio;
         producto.stock = stock || producto.stock;
         producto.detalle = detalle || producto.detalle;
+        producto.detallar = detallar || producto.detallar; // Actualizar el nuevo campo
         producto.imagen = imagen || producto.imagen;
 
         await producto.save();
@@ -127,8 +129,9 @@ const eliminarProducto = async (req, res) => {
     }
 };
 
+// Filtrar productos por detalle
 const filtrarProductosPorDetalle = async (req, res) => {
-    const { detalle } = req.query; // Obtener el valor de 'detalle' del query string
+    const { detalle } = req.query;
 
     if (!detalle) {
         return res.status(400).json({ error: 'El parámetro de búsqueda "detalle" es obligatorio' });
@@ -138,7 +141,7 @@ const filtrarProductosPorDetalle = async (req, res) => {
         const productos = await Producto.findAll({
             where: {
                 detalle: {
-                    [Op.like]: `%${detalle}%` // Filtrar productos que contengan el texto del detalle
+                    [Op.like]: `%${detalle}%`
                 }
             }
         });
@@ -152,8 +155,6 @@ const filtrarProductosPorDetalle = async (req, res) => {
         res.status(500).json({ error: 'Error al filtrar productos', details: error.message });
     }
 };
-
-
 
 export {
     crearProducto,

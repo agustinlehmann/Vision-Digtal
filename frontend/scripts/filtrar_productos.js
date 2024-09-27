@@ -1,5 +1,3 @@
-// productos.js
-
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM completamente cargado y analizado.");
 
@@ -18,6 +16,32 @@ document.addEventListener("DOMContentLoaded", function () {
             filtrarProductos(categoria);
         });
     });
+
+    // Crear el modal
+    const modalHtml = `
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="Imagen del producto" class="img-fluid mb-3">
+                    <h5 id="modalProductName" class="fw-bold"></h5>
+                    <p id="modalProductPrice" class="text-muted"></p>
+                    <p id="stok" class="text-secondary"></p>
+                    <p id="modalProductDetail" class="text-secondary"></p> <!-- Nuevo elemento para el detalle específico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
 });
 
 function filtrarProductos(categoria) {
@@ -51,15 +75,17 @@ function mostrarProductos(productos) {
         divProducto.classList.add('col-12', 'col-sm-6', 'col-md-4', 'mb-4');
     
         divProducto.innerHTML = `
-          <style>
+        <style>
     .product-card {
         border-radius: 10px;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+                width: 50%;
+
     }
 
     .product-card img {
-        height: 180px; /* Ajusta la altura de la imagen */
+        height: 150px; /* Ajusta la altura de la imagen */
         object-fit: cover;
         width: 100%;
     }
@@ -96,10 +122,8 @@ function mostrarProductos(productos) {
         margin-right: 0.5rem;
     }
 </style>
-
-            <div class="card product-card shadow-sm" style="max-width: 100%; margin: auto;">
+            <div class="card product-card shadow-sm" style="max-width: 100%; margin: auto;" data-id="${product.id_producto}">
                 <img src="http://localhost:3000/api/${product.imagen}" alt="Imagen del producto">
-
                 <div class="card-body">
                     <h5 class="card-title">${product.nombre_producto}</h5>
                     <p class="card-text">$${product.precio}</p>
@@ -110,14 +134,35 @@ function mostrarProductos(productos) {
                     </div>
                 </div>
             </div>
-            
         `;
     
         contenedor.appendChild(divProducto);
     });
     console.log("Productos mostrados en el contenedor:", productos.length);
 
-    if (typeof botoncomprar === 'function') {
-        botoncomprar();
-    }
+    // Añadir evento de clic en los productos para mostrar el modal
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const productId = card.getAttribute('data-id');
+            const product = productos.find(p => p.id_producto == productId);
+            if (product) {
+                // Asignar directamente desde el objeto product
+                const modalImage = `http://localhost:3000/api/${product.imagen || ''}`;
+                const modalProductName = product.nombre_producto || 'Nombre no disponible';
+                const modalProductPrice = `$${product.precio || 'Precio no disponible'}`;
+                const modalStock = `Stock: ${product.stock || 'No disponible'}`;
+                const modalProductDetail = product.detalle || 'Detalle no disponible'; // Detalle específico
+
+                // Mostrar el modal
+                document.getElementById('modalImage').src = modalImage;
+                document.getElementById('modalProductName').textContent = modalProductName;
+                document.getElementById('modalProductPrice').textContent = modalProductPrice;
+                document.getElementById('stok').textContent = modalStock;
+                document.getElementById('modalProductDetail').textContent = modalProductDetail; // Asignar detalle específico
+
+                const modal = new bootstrap.Modal(document.getElementById('productModal'));
+                modal.show();
+            }
+        });
+    });
 }

@@ -15,47 +15,50 @@ fetch('http://localhost:3000/api/productos', {
         throw new Error('La respuesta no es un arreglo.');
     }
 
-    agregarcosas.innerHTML = data.map(product => `
+    agregarcosas.innerHTML = data.map(product => {
+        return `
         <div class="col-lg-3 col-md-4 mb-4">
-            <div class="card product-card">
-                <img class="card-img-top">
+            <div class="card product-card bg-white shadow"> <!-- Cambiado a bg-white -->
+                <img class="card-img-top" src="http://localhost:3000/api/${product.imagen}" alt="Imagen del producto">
                 <div class="card-body">
-                <form id="asd${product.id_producto}">
-                    <h5 class="card-title">${product.nombre_producto}</h5>
-                    <p class="card-text" data-price="${product.precio}">$${product.precio}</p>
-                    <p class="card-text" data-stock="${product.stock}">Stock: ${product.stock}</p>
-                    <p class="card-text" data-detalle="${product.detalle}">Detalle: ${product.detalle}</p>
-                    <div class="d-flex justify-content-between">
-                        <a href="#" id="a${product.id_producto}" class="btn btn-primary buy-btn" data-name="${product.nombre_producto}" data-price="${product.precio}">
-                            <i class="bi bi-pencil-square text-white"></i>
-                        </a>
-                        <a href="#" id="b${product.id_producto}" class="btn btn-danger buy-btn" data-name="${product.nombre_producto}" data-price="${product.precio}">
-                            <i class="bi bi-trash text-trash"></i>
-                        </a>
-                    </div>
+                    <form id="asd${product.id_producto}">
+                        <h5 class="card-title">${product.nombre_producto}</h5>
+                        <p class="card-text" data-price="${product.precio}">$${product.precio}</p>
+                        <p class="card-text" data-stock="${product.stock}">Stock: ${product.stock}</p>
+                        <p class="card-text" data-detalle="${product.detalle}">Detalle: ${product.detalle}</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" id="a${product.id_producto}" class="btn btn-primary buy-btn" data-name="${product.nombre_producto}" data-price="${product.precio}">
+                                <i class="bi bi-pencil-square text-white"></i>
+                            </a>
+                            <a href="#" id="b${product.id_producto}" class="btn btn-danger buy-btn" data-name="${product.nombre_producto}" data-price="${product.precio}">
+                                <i class="bi bi-trash text-trash"></i>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                </form>
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
+    
 
-        for (let key in data) {
-            const boton1 = document.getElementById('a' + data[key].id_producto);
-            const boton2 = document.getElementById('b' + data[key].id_producto);
-            const divasd = document.getElementById('asd' + data[key].id_producto);
+    for (let key in data) {
+        const boton1 = document.getElementById('a' + data[key].id_producto);
+        const boton2 = document.getElementById('b' + data[key].id_producto);
+        const divasd = document.getElementById('asd' + data[key].id_producto);
 
-            boton1.addEventListener('click', (event) => {
-                event.preventDefault();
-                actualizar(data[key].id_producto, divasd);
-            });
-            boton2.addEventListener('click', (event) => {
-                event.preventDefault();
-                eliminar(data[key].id_producto);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        boton1.addEventListener('click', (event) => {
+            event.preventDefault();
+            actualizar(data[key].id_producto, divasd, data[key]);
+        });
+        boton2.addEventListener('click', (event) => {
+            event.preventDefault();
+            eliminar(data[key].id_producto);
+        });
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+});
 
 function eliminar(id2) {
     console.log('id ' + id2);
@@ -74,12 +77,10 @@ function eliminar(id2) {
     .catch(error => console.error(error));
 }
 
-function actualizar(id2, div) {
-    // Crear elementos del formulario
+function actualizar(id2, div, product) {
     const form = document.createElement('form');
     form.className = 'p-4 border rounded bg-light shadow-lg mx-auto';
 
-    // Añadir contenedor con ancho máximo
     const container = document.createElement('div');
     container.className = 'container';
     form.appendChild(container);
@@ -93,6 +94,7 @@ function actualizar(id2, div) {
     const nombre = document.createElement('input');
     nombre.type = 'text';
     nombre.className = 'form-control';
+    nombre.value = product.nombre_producto; // Cargar el valor actual
     nombreGroup.appendChild(nombreLabel);
     nombreGroup.appendChild(nombre);
 
@@ -105,6 +107,7 @@ function actualizar(id2, div) {
     const precio = document.createElement('input');
     precio.type = 'number';
     precio.className = 'form-control';
+    precio.value = product.precio; // Cargar el valor actual
     precioGroup.appendChild(precioLabel);
     precioGroup.appendChild(precio);
 
@@ -117,6 +120,7 @@ function actualizar(id2, div) {
     const cantidad = document.createElement('input');
     cantidad.type = 'number';
     cantidad.className = 'form-control';
+    cantidad.value = product.stock; // Cargar el valor actual
     cantidadGroup.appendChild(cantidadLabel);
     cantidadGroup.appendChild(cantidad);
 
@@ -133,6 +137,7 @@ function actualizar(id2, div) {
         const option = document.createElement('option');
         option.value = detalle;
         option.textContent = detalle;
+        if (detalle === product.detalle) option.selected = true; // Seleccionar el detalle actual
         detalleSelect.appendChild(option);
     });
     detalleGroup.appendChild(detalleLabel);
@@ -173,8 +178,6 @@ function actualizar(id2, div) {
 }
 
 function actualizarProducto(id2, producto) {
-    console.log('id ' + id2);
-
     fetch('http://localhost:3000/api/productos/' + id2, {
         method: 'PUT',
         headers: {
@@ -186,7 +189,12 @@ function actualizarProducto(id2, producto) {
     .then(data => {
         console.log(data);
         console.log('Actualizado correctamente');
-        location.reload();
+        
+        // Actualizar los elementos en el DOM sin recargar la página
+        document.querySelector(`#asd${id2} h5`).textContent = producto.nombre_producto || data.nombre_producto;
+        document.querySelector(`#asd${id2} [data-price]`).textContent = `$${producto.precio || data.precio}`;
+        document.querySelector(`#asd${id2} [data-stock]`).textContent = `Stock: ${producto.stock || data.stock}`;
+        document.querySelector(`#asd${id2} [data-detalle]`).textContent = `Detalle: ${producto.detalle || data.detalle}`;
     })
     .catch(error => console.error(error));
 }

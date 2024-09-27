@@ -110,13 +110,14 @@ const actualizarPedido = async (req, res) => {
     }
 
     try {
-        const { id_usuario, cantidad, total, direccion, codigo_postal, ciudad, provincia } = req.body;
+        const { id_usuario, cantidad, total, direccion, codigo_postal, ciudad, provincia, estado } = req.body; // Añadir estado al destructuring
         const pedido = await Pedido.findByPk(id);
 
         if (!pedido) {
             return res.status(404).json({ error: 'Pedido no encontrado' });
         }
 
+        // Validaciones opcionales
         if (id_usuario !== undefined && typeof id_usuario !== 'number') {
             return res.status(400).json({ error: 'id_usuario debe ser un número' });
         }
@@ -126,7 +127,11 @@ const actualizarPedido = async (req, res) => {
         if (total !== undefined && typeof total !== 'number') {
             return res.status(400).json({ error: 'total debe ser un número' });
         }
+        if (estado !== undefined && typeof estado !== 'string') {
+            return res.status(400).json({ error: 'estado debe ser un string' });
+        }
 
+        // Actualización de campos
         pedido.id_usuario = id_usuario || pedido.id_usuario;
         pedido.cantidad = cantidad || pedido.cantidad;
         pedido.total = total || pedido.total;
@@ -134,6 +139,7 @@ const actualizarPedido = async (req, res) => {
         pedido.codigo_postal = codigo_postal || pedido.codigo_postal;
         pedido.ciudad = ciudad || pedido.ciudad;
         pedido.provincia = provincia || pedido.provincia;
+        pedido.estado = estado || pedido.estado; // Actualizar estado si se proporciona
 
         await pedido.save();
         res.status(200).json(pedido);
@@ -142,6 +148,7 @@ const actualizarPedido = async (req, res) => {
         res.status(500).json({ error: 'Error al actualizar el pedido' });
     }
 };
+
 
 const eliminarPedido = async (req, res) => {
     const { id } = req.params;

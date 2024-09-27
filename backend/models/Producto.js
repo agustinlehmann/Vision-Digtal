@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { bd } from '../config/bd.js';
+
 // Definir el modelo de Producto
 const Producto = bd.define('Producto', {
   id_producto: {
@@ -26,6 +27,10 @@ const Producto = bd.define('Producto', {
   imagen: { // Campo para la ruta de la imagen
     type: DataTypes.STRING,
     allowNull: true
+  },
+  detallar: {
+    type: DataTypes.STRING,
+    allowNull: false // Asegúrate de que este campo es obligatorio
   }
 }, {
   tableName: 'Producto',

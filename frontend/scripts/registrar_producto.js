@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const precio = document.getElementById('precio').value;
     const cantidad = document.getElementById('stock').value;
     const detalle = document.getElementById('detalle').value;
+    const detallar = document.getElementById('detallar').value; // Nuevo campo para detalle específico
     const imagen = document.getElementById('imagen').files[0]; // Obtiene el archivo seleccionado
 
     let errorMessage = '';
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nombre === '') {
       errorMessage += 'El nombre del producto no puede estar vacío.\n';
     } else if (nombre.length < 5) {
-      errorMessage += 'El nombre del producto debe tener al menos 5 caractefres.\n';
+      errorMessage += 'El nombre del producto debe tener al menos 5 caracteres.\n';
     }
 
     // Validación para el campo de precio
@@ -38,6 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
       errorMessage += 'Debe seleccionar un tipo de producto en el detalle.\n';
     }
 
+    // Validación para el campo de detalle específico
+    if (detallar === '') {
+      errorMessage += 'El detalle específico no puede estar vacío.\n';
+    }
+
     if (errorMessage) {
       alert(errorMessage);
     } else {
@@ -49,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('precio', parseFloat(precio));
       formData.append('stock', parseInt(cantidad));
       formData.append('detalle', detalle);
+      formData.append('detallar', detallar); // Agrega el detalle específico
       if (imagen) formData.append('imagen', imagen); // Agrega el archivo si existe
 
       // Verifica el contenido de FormData
