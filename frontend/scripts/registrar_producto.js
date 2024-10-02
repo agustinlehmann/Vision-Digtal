@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         body: formData
       })
       .then(response => {
+        console.log(response);
         if (!response.ok) {
           return response.json().then(errorData => {
             throw new Error(`HTTP error! status: ${response.status} - ${errorData.error}`);

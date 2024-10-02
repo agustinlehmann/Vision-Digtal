@@ -76,6 +76,20 @@ function mostrarProductos(productos) {
     
         divProducto.innerHTML = `
         <style>
+    
+                    .buyboton {
+    background-color: #FFA755;
+    border: none;
+    color: white;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.buyboton:hover {
+    background-color: #FF8A40;
+    transform: scale(1.05);
+}
+
+                
     .product-card {
         border-radius: 10px;
         overflow: hidden;
@@ -109,18 +123,9 @@ function mostrarProductos(productos) {
         color: #333;
     }
 
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-primary i {
-        margin-right: 0.5rem;
-    }
+    
+    
+        
 </style>
             <div class="card product-card shadow-sm" style="max-width: 100%; margin: auto;" data-id="${product.id_producto}">
                 <img src="http://localhost:3000/api/${product.imagen}" alt="Imagen del producto">

@@ -127,3 +127,25 @@ a {
 nav {
     background-color: #FFA755 !important;
 }
+
+.whatsapp-button {
+    position: fixed; /* Posición fija */
+    bottom: 20px; /* Espacio desde el fondo */
+    right: 20px; /* Espacio desde la derecha */
+    background-color: #25D366; /* Color de WhatsApp */
+    border-radius: 50%; /* Hace el botón circular */
+    width: 60px; /* Ancho del botón */
+    height: 60px; /* Alto del botón */
+    text-align: center;
+    line-height: 55px; /* Centra el icono verticalmente */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s; /* Transición para el efecto hover */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+.whatsapp-button:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al pasar el ratón */
+}
+.whatsapp-icon {
+    width: 30px; /* Tamaño del icono */
+    height: 30px; /* Tamaño del icono */
+}

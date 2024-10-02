@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+</head>
+<body>
+    
+  <style>
+    .footer {
+    background-color: #ffa755;
+    color: black;
+    padding: 20px 0;
+    margin-top: 0px;
+}
+a {
+    color: inherit; /* Hereda el color del elemento padre */
+    text-decoration: none; /* Opcional, para eliminar el subrayado */
+}
+.whatsapp-button {
+    position: fixed; /* Posición fija */
+    bottom: 20px; /* Espacio desde el fondo */
+    right: 20px; /* Espacio desde la derecha */
+    background-color: #25D366; /* Color de WhatsApp */
+    border-radius: 50%; /* Hace el botón circular */
+    width: 60px; /* Ancho del botón */
+    height: 60px; /* Alto del botón */
+    text-align: center;
+    line-height: 55px; /* Centra el icono verticalmente */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s; /* Transición para el efecto hover */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+.whatsapp-button:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al pasar el ratón */
+}
+.whatsapp-icon {
+    width: 30px; /* Tamaño del icono */
+    height: 30px; /* Tamaño del icono */
+}
+
+  </style>
+
+    <div class="sticky-top"></div>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #ffa755;">
+
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo" style="height: 40px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                      
+                       
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <br>
+
+    <div id="map" style="height: 500px;"></div>
+
+<br>
+
+    <footer class="footer text-center">
+        <div class="container d-flex justify-content-around">
+           
+            <!-- Información de Contacto -->
+            <div class="contact-info">
+                <p><strong>Información de Contacto</strong></p>
+                <p>
+                    <i class="bi bi-geo-alt"></i> Av. Rigolleau 3169, Berazategui<br>
+                    <i class="bi bi-globe"></i> Buenos Aires, Argentina<br>
+                    <i class="bi bi-telephone"></i> (011) 5665-7009 Líneas Rotativas<br>
+
+                </p>
+            </div>
+
+            <!-- Horarios de Atención -->
+            <div class="business-hours">
+                <p><strong>Horarios de Atención</strong></p>
+                <p>
+                    <i class="bi bi-shop"></i> Showroom de Atención al Público<br>
+                    <i class="bi bi-calendar"></i> Lunes a Viernes: 10:00 a 17:00 hs.<br>
+                    <i class="bi bi-calendar"></i> Sábados: 09:00 a 13:00 hs.
+                </p>
+            </div>
+    
+            <!-- Información de la Empresa -->
+            <div class="company-info">
+                <p><strong>Acerca de Vision Digital</strong></p>
+                <p>
+                    <a href="nuestra-empresa.html"><i class="bi bi-building"></i> Nuestra Empresa</a><br>
+                    <a href="terminos-condiciones.html"><i class="bi bi-file-earmark-text"></i> Términos y Condiciones</a><br>
+                    <a href="./AcercadeVisionDigital/contacto.html"><i class="bi bi-chat"></i> Contacto</a>
+                </p>
+            </div>
+        </div>
+    
+        <!-- Redes sociales -->
+        <div class="social-media">
+            <p>
+                <a href="https://www.facebook.com" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.twitter.com" target="_blank"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.instagram.com" target="_blank"><i class="bi bi-instagram"></i></a>
+                <br>&copy; Vision Digital. Todos los derechos reservados.
+            </p>
+        </div>
+    </footer>
+    <a href="https://api.whatsapp.com/send?phone=1156657009&text=Hola%20quiero%20más%20información!" target="_blank" class="whatsapp-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="contacto.js"></script>
+</body>
+</html>
