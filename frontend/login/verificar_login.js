@@ -74,5 +74,6 @@ function cerrarSesion() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('userRole');
   localStorage.removeItem('userId')   
+  localStorage.removeItem('cart')   
   window.location.href = 'index.html';
 }

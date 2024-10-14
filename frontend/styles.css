@@ -5,7 +5,7 @@ nav {
 
 /* Estilo general del body */
 body {
-    background: linear-gradient(#FFA755, 70%, #6495ED);
+    background: linear-gradient(#FFA755, 60%, #6495ED);
 
 }
 a {
@@ -166,3 +166,28 @@ body {
 }
 
 
+.map-button {
+    position: fixed; /* Posición fija */
+    bottom: 25px; /* Espacio desde la parte inferior */
+    right: 90px; /* Espacio desde la derecha */
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 30px;
+    background-color: #007BFF; /* Color de fondo */
+    color: white; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 18px; /* Tamaño de la fuente */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Sombra */
+    transition: background-color 0.3s, transform 0.2s; /* Transición suave */
+}
+
+.map-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.map-button i {
+    margin-right: 10px; /* Espacio entre el icono y el texto */
+    font-size: 20px; /* Tamaño del icono */
+}

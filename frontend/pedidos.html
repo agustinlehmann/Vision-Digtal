@@ -3,130 +3,418 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Estado del Pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            background-color: #FFA755 !important;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffa755;
+        }
+
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+            position: relative;
+            margin: 30px auto;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #e0e0e0;
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .checkout-steps li {
+            text-align: center;
+            flex: 1;
+            z-index: 1;
+            position: relative;
+        }
+
+        .checkout-steps li img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+
+        .checkout-steps li.completed img {
+            filter: hue-rotate(40deg) saturate(5) brightness(1.2);
+        }
+
+        .checkout-steps li.in-process img {
+            filter: hue-rotate(40deg) saturate(1.5) brightness(1);
+        }
+
+        .checkout-steps li.completed img:last-child,
+        .checkout-steps li.in-process img:last-child {
+            filter: grayscale(100%);
+        }
+
+        .checkout-steps li p {
+            margin: 0;
+            color: #ffa755;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        table {
+            width: 80%;
+            margin: 40px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ffa755;
+            color: white;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+
+        td {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #e63946;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .footer {
+            background-color: #ffa755;
+            color: black;
+            padding: 20px 0;
+            margin-top: 0;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
-                <img src="img/logo.png" alt="Logo" style="height: 40px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-            </div>
-        </div>
-    </nav>
 
-    <div class="container mt-4">
-        <h2 class="mb-4">Listado de Pedidos</h2>
-        <div class="row" id="pedido-list">
+    <div class="sticky-top">
+        <nav class="navbar navbar-expand-lg ">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <img src="img/logo.png" alt="Logo" style="height: 40px;">
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="content">
+        <h1>Estado del Pedido</h1>
+
+        <ul class="checkout-steps">
+            <li>
+                <img src="https://img.icons8.com/ios-filled/50/000000/hourglass.png" alt="Pendiente">
+                <p>Pendiente</p>
+            </li>
+            <li>
+                <img src="https://img.icons8.com/ios-filled/50/000000/process.png" alt="En proceso">
+                <p>En proceso</p>
+            </li>
+            <li>
+                <img src="https://img.icons8.com/ios-filled/50/000000/delivery.png" alt="Enviado">
+                <p>Enviado</p>
+            </li>
+            <li>
+                <img src="https://img.icons8.com/ios-filled/50/000000/checked.png" alt="Entregado">
+                <p>Entregado</p>
+            </li>
+        </ul>
+
+        <table id="productos-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Estado Pedido</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los productos se insertarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+    
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+        Más Información
+    </button>
+      
+    <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="staticBackdropLabel">Detalles del Pedido</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="pedido-list" class="row"></div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const userId = localStorage.getItem('userId');
+                    const pedidoList = document.getElementById('pedido-list');
+
+                    if (!userId) {
+                        pedidoList.innerHTML = `<div class="alert alert-warning" role="alert">
+                            No has iniciado sesión.
+                        </div>`;
+                        return;
+                    }
+
+                    fetch('http://localhost:3000/api/pedidos')
+                        .then(response => response.json())
+                        .then(data => {
+                            const userPedidos = data.filter(pedido => pedido.id_usuario == userId);
+
+                            if (userPedidos.length === 0) {
+                                pedidoList.innerHTML = `<div class="alert alert-info" role="alert">
+                                    Aún no has realizado ningún pedido.
+                                </div>`;
+                            } else {
+                                userPedidos.forEach(pedido => {
+                                    let productos = [];
+                                    try {
+                                        const cleanedProductos = pedido.productos
+                                            .replace(/^\s*"/, '')
+                                            .replace(/"\s*$/, '')
+                                            .replace(/\\/g, '');
+                                        productos = JSON.parse(cleanedProductos);
+                                    } catch (error) {
+                                        console.error('Error al parsear productos:', error);
+                                    }
+
+                                    const productIds = productos.map(prod => prod.id_producto).join(',');
+
+                                    fetch(`http://localhost:3000/api/productos?id=${productIds}`)
+                                        .then(response => response.json())
+                                        .then(productData => {
+                                            const productMap = {};
+                                            productData.forEach(prod => {
+                                                productMap[prod.id_producto] = prod.nombre_producto;
+                                            });
+
+                                            const productosDisplay = Array.isArray(productos)
+                                                ? productos.map(prod => `${productMap[prod.id_producto] || 'Desconocido'} (Cantidad: ${prod.cantidad})`).join(', ')
+                                                : 'Sin productos';
+
+                                            pedidoList.innerHTML += 
+                                                `<div class="mb-3" style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+                                                    <h6>Pedido #${pedido.id_pedido}</h6>
+                                                    <p><strong>Productos:</strong> ${productosDisplay}</p>
+                                                    <p><strong>Total:</strong> $${pedido.total}</p>
+                                                    <p><strong>Dirección:</strong> ${pedido.direccion}</p>
+                                                    <p><strong>Código Postal:</strong> ${pedido.codigo_postal}</p>
+                                                    <p><strong>Ciudad:</strong> ${pedido.ciudad}</p>
+                                                    <p><strong>Estado:</strong> ${pedido.estado}</p>
+                                                </div>`;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error al obtener nombres de productos:', error);
+                                        });
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al cargar los pedidos:', error);
+                            pedidoList.innerHTML = `<div class="alert alert-danger" role="alert">
+                                Error al cargar los pedidos. Intenta nuevamente más tarde.
+                            </div>`;
+                        });
+                });
+            </script>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; Vision Digital. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const userId = localStorage.getItem('userId');
-            const pedidoList = document.getElementById('pedido-list');
+            const productosTableBody = document.querySelector('#productos-table tbody');
 
             if (!userId) {
-                pedidoList.innerHTML = `<div class="alert alert-warning" role="alert">
-                    No has iniciado sesión.
-                </div>`;
+                alert("No has iniciado sesión.");
+                productosTableBody.innerHTML = `<tr><td colspan="5" class="text-center">No has iniciado sesión.</td></tr>`;
                 return;
             }
 
             fetch('http://localhost:3000/api/pedidos')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta de la red');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    console.log('Datos de la API:', data);  // Verifica la estructura
                     const userPedidos = data.filter(pedido => pedido.id_usuario == userId);
 
                     if (userPedidos.length === 0) {
-                        pedidoList.innerHTML = `<div class="alert alert-info" role="alert">
-                            Aún no has realizado ningún pedido.
-                        </div>`;
+                        productosTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Aún no has realizado ningún pedido.</td></tr>`;
                     } else {
                         userPedidos.forEach(pedido => {
-                            const pedidoCard = document.createElement('div');
-                            pedidoCard.className = 'col-md-4';
-
-                            console.log('Contenido de productos antes de parsear:', pedido.productos);
-
                             let productos = [];
                             try {
                                 const cleanedProductos = pedido.productos
                                     .replace(/^\s*"/, '')
                                     .replace(/"\s*$/, '')
                                     .replace(/\\/g, '');
-
                                 productos = JSON.parse(cleanedProductos);
                             } catch (error) {
                                 console.error('Error al parsear productos:', error);
                             }
 
+                            const estado = pedido.estado;
+                            actualizarEstadoEntrega(estado);
+
                             const productIds = productos.map(prod => prod.id_producto).join(',');
 
-                            // Llama a la API para obtener los nombres de los productos
                             fetch(`http://localhost:3000/api/productos?id=${productIds}`)
-                                .then(response => response.json())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error en la respuesta de la red');
+                                    }
+                                    return response.json();
+                                })
                                 .then(productData => {
-                                    console.log('Datos de productos desde la API:', productData); // Depuración
-
                                     const productMap = {};
                                     productData.forEach(prod => {
-                                        productMap[prod.id_producto] = prod.nombre_producto; // Cambiado a 'nombre_producto'
+                                        const precio = prod.precio;
+                                        productMap[prod.id_producto] = {
+                                            nombre: prod.nombre_producto.trim(),
+                                            precio: precio
+                                        };
                                     });
 
-                                    console.log('Mapa de productos:', productMap); // Verifica el mapa de productos
+                                    let totalPedido = 0;
+                                    productos.forEach(prod => {
+                                        const row = document.createElement('tr');
 
-                                    const productosDisplay = Array.isArray(productos)
-                                        ? productos.map(prod => `Nombre: ${productMap[prod.id_producto] || 'Desconocido'} (Cantidad: ${prod.cantidad})`).join(', ')
-                                        : 'Sin productos';
+                                        const nombreProducto = productMap[prod.id_producto]?.nombre || 'Desconocido';
+                                        const precioUnitario = productMap[prod.id_producto]?.precio || 0;
+                                        const cantidad = prod.cantidad || 1;
+                                        const totalProducto = (precioUnitario * cantidad).toFixed(2);
 
-                                    const cantidadTotal = Array.isArray(productos)
-                                        ? productos.reduce((total, prod) => total + prod.cantidad, 0)
-                                        : 0;
+                                        totalPedido += parseFloat(totalProducto);
 
-                                    pedidoCard.innerHTML = `
-                                        <div class="card mb-4">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Pedido #${pedido.id_pedido}</h5>
-                                                <p class="card-text"><strong>Productos:</strong> ${productosDisplay}</p>
-                                                <p class="card-text"><strong>Total:</strong> $${pedido.total}</p>
-                                                <p class="card-text"><strong>Dirección:</strong> ${pedido.direccion}</p>
-                                                <p class="card-text"><strong>Código Postal:</strong> ${pedido.codigo_postal}</p>
-                                                <p class="card-text"><strong>Ciudad:</strong> ${pedido.ciudad}</p>
-                                                <p class="card-text"><strong>Provincia:</strong> ${pedido.provincia}</p>
-                                                
-                                            </div>
-                                        </div>
-                                    `;
+                                        row.innerHTML =
+                                            `<td>${nombreProducto}</td>
+                                            <td>${precioUnitario.toFixed(2)} $</td>
+                                            <td>${cantidad}</td>
+                                            <td>${estado}</td>
+                                            <td>${totalProducto} $</td>`;
 
-                                    pedidoList.appendChild(pedidoCard);
+                                        productosTableBody.appendChild(row);
+                                    });
+
+                                    const totalRow = document.createElement('tr');
+                                    totalRow.innerHTML =
+                                        `<td colspan="4">Total del Pedido:</td>
+                                        <td class="total-price">${totalPedido.toFixed(2)} $</td>`;
+                                    productosTableBody.appendChild(totalRow);
                                 })
                                 .catch(error => {
-                                    console.error('Error al obtener nombres de productos:', error);
+                                    console.error('Error al obtener detalles de productos:', error);
                                 });
                         });
                     }
                 })
                 .catch(error => {
                     console.error('Error al cargar los pedidos:', error);
-                    pedidoList.innerHTML = `<div class="alert alert-danger" role="alert">
-                        Error al cargar los pedidos. Intenta nuevamente más tarde.
-                    </div>`;
+                    productosTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Error al cargar los pedidos. Intenta nuevamente más tarde.</td></tr>`;
                 });
         });
+
+        function actualizarEstadoEntrega(estado) {
+            const steps = document.querySelectorAll('.checkout-steps li');
+            steps.forEach(step => {
+                step.classList.remove('completed');
+                step.classList.remove('in-process');
+            });
+
+            switch (estado) {
+                case 'Pendiente':
+                    steps[0].classList.add('completed');
+                    break;
+                case 'En proceso':
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('completed', 'in-process');
+                    break;
+                case 'Enviado':
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('completed');
+                    steps[2].classList.add('completed');
+                    break;
+                case 'Entregado':
+                    steps.forEach(step => step.classList.add('completed'));
+                    steps[3].querySelector('img').style.filter = 'grayscale(100%)'; 
+                    break;
+                default:
+                    break;
+            }
+        }
     </script>
+
 </body>
 </html>
