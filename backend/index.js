@@ -46,7 +46,8 @@ app.post('/api/create_preference', async (req, res) => {
             items: [{
                 title: req.body.title,
                 quantity: Number(req.body.quantity),
-                unit_price: Number(req.body.priceFloat),
+                unit_price: Number(req.body.unit_price),
+
             }],
             back_urls: {
                 success: 'https://www.youtube.com/',  // Cambia las URLs según tu necesidad

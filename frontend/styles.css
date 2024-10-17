@@ -191,3 +191,9 @@ body {
     margin-right: 10px; /* Espacio entre el icono y el texto */
     font-size: 20px; /* Tamaño del icono */
 }
+
+@media screen and (max-width: 768px) {
+  #carouselExampleControls {
+    display: none;
+  }
+}

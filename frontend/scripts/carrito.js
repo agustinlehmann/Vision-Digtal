@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartContainer = document.getElementById('cart-items');
     const totalElement = document.getElementById('cart-total');
     const procederpago = document.getElementById('procederpago');
-    const mp = new MercadoPago('YOUR_PUBLIC_KEY', { locale: "es-AR" });
+    const mp = new MercadoPago('TEST-e6e86703-feb8-4555-a64c-5acf8bb55e21', { locale: "es-AR" });
     const pagar = document.getElementById('pagar');
 
     function renderCart() {
